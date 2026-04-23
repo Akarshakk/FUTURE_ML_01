@@ -1,5 +1,7 @@
 # Sales & Demand Forecasting Dashboard 📈
 
+## Deployed App Link : https://akarshakk-future-ml-01-app-fh23vc.streamlit.app
+
 This repository contains a **Sales and Demand Forecasting System** built with Python and Streamlit. The system predicts future sales using historical business data and presents the results in a clear, business-friendly dashboard designed for store owners, startup founders, and business managers.
 
 This project was built as part of the **Future Interns** Machine Learning task.
