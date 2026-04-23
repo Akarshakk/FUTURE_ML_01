@@ -136,7 +136,42 @@ if len(daily_data) > test_days * 2:
     ax_pred.legend()
     st.pyplot(fig_pred)
 
-    # --- 6. BUSINESS INSIGHTS ---
+    # --- 6. FUTURE FORECAST (NEXT 30 DAYS) ---
+    st.subheader("🚀 Future 30-Day Forecast")
+    st.markdown("We have retrained the model on **all available data** to predict demand for the next 30 days.")
+    
+    # Train on FULL data for future prediction
+    with st.spinner("Generating future forecast..."):
+        model_full = RandomForestRegressor(n_estimators=100, random_state=42)
+        model_full.fit(X, y)
+        
+        # Generate future dates
+        last_date = daily_data['date'].max()
+        future_dates = pd.date_range(start=last_date + pd.Timedelta(days=1), periods=30)
+        
+        # Create future features
+        future_df = pd.DataFrame({'date': future_dates})
+        future_df['month'] = future_df['date'].dt.month
+        future_df['day'] = future_df['date'].dt.day
+        future_df['dayofweek'] = future_df['date'].dt.dayofweek
+        future_df['is_weekend'] = (future_df['dayofweek'] >= 5).astype(int)
+        # Assume 0 promotions for future to be conservative
+        future_df['onpromotion'] = 0 
+        
+        future_X = future_df[features]
+        future_predictions = model_full.predict(future_X)
+    
+    # Plot Future Forecast
+    fig_future, ax_future = plt.subplots(figsize=(12, 5))
+    ax_future.plot(daily_data['date'][-60:], daily_data['sales'][-60:], label='Recent Historical Sales', color='blue')
+    ax_future.plot(future_dates, future_predictions, label='Future Forecast (30 Days)', color='green', linestyle='--', linewidth=2)
+    ax_future.set_title("Sales Forecast for the Next 30 Days", fontsize=14)
+    ax_future.set_xlabel("Date")
+    ax_future.set_ylabel("Predicted Sales")
+    ax_future.legend()
+    st.pyplot(fig_future)
+
+    # --- 7. BUSINESS INSIGHTS ---
     st.subheader("💡 Business Insights & Planning")
     st.markdown(f"""
     **What does this forecast mean?**
