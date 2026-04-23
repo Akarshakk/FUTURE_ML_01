@@ -18,7 +18,7 @@ Welcome to the Demand Forecasting Dashboard! This tool helps business owners and
 @st.cache_data
 def load_data():
     # Load dataset with selected columns to optimize memory
-    df = pd.read_csv("train.csv", usecols=["date", "store_nbr", "family", "sales", "onpromotion"])
+    df = pd.read_csv("train.csv.gz", usecols=["date", "store_nbr", "family", "sales", "onpromotion"])
     df['date'] = pd.to_datetime(df['date'])
     return df
 
